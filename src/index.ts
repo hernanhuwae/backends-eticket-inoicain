@@ -17,7 +17,16 @@ async function Init() {
 
     const PORT = 8000;
 
+    //For Vercel shows this API is running on server
+    app.get("/", (req,res)=>{
+      res.status(200).json({
+        message: "Server is running!",
+        data: null
+      })
+    })
+
     app.use(bodyParser.json());
+
     app.use("/api", router);
 
     app.listen(PORT, () => {
