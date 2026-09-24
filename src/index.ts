@@ -1,13 +1,34 @@
-import express from "express"
-import router from "./routes/api"
+import express from "express";
+import router from "./routes/api";
+import bodyParser from "body-parser";
+import db from "./utils/database"
 
-const app = express()
+async function Init() {
 
-const PORT = 3000;
+  try {
 
+    //connect to mongoDb
+    const res = await db()
 
-app.use('/api', router)
+    console.log("DB connect", res);
+    
 
-app.listen(PORT, () => {
-    console.log(`SERVER IS RUNNING ON PORT http://localhost:${PORT}`);
-} )
+    const app = express();
+
+    const PORT = 8000;
+
+    app.use(bodyParser.json());
+    app.use("/api", router);
+
+    app.listen(PORT, () => {
+      console.log(`SERVER IS RUNNING ON PORT http://localhost:${PORT}`);
+    });
+
+  } catch (error) {
+
+    console.log(error);
+    
+  }
+}
+
+Init();
