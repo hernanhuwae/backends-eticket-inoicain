@@ -32,7 +32,7 @@ const registerValidateSchema = yup.object({
 });
 
 export default {
-  
+
   async register(req: Request, res: Response) {
     const { fullname, username, email, password, confirmPassword } =
       req.body as unknown as TRegister;
@@ -67,6 +67,14 @@ export default {
   },
 
   async login(req: Request, res: Response) {
+
+    /**
+     #swagger.requestBody = {
+        required: true,
+        schema: {$ref : "#/components/schemas/LoginRequest"} 
+      }
+     */
+
     const { identifier, password } = req.body as unknown as TLogin;
 
     try {
@@ -97,7 +105,7 @@ export default {
         return res.status(403).json({
           messagae: "password is invalid!",
           data: null,
-        });
+        }); 
       }
 
       //Input Token
@@ -113,13 +121,26 @@ export default {
     } catch (error) {
       const err = error as unknown as Error;
       return res.status(400).json({
-        message: err.message, 
+        message: err.message,
         data: null,
       });
     }
   },
 
-  async profile(req: IReqUser, res: Response) {  //use "IReqUser" to declare "user" to be used globally in typescript 
+  async profile(req: IReqUser, res: Response) {
+
+    /**
+      #swagger.security=[{
+        "bearerAuth" : []
+      }] 
+
+     */
+
+    //Then type in terminal "npm run docs" to update docs in swagger
+
+
+
+    //use "IReqUser" to declare "user" to be used globally in typescript
     try {
       const user = req.user;
       const result = await userModel.findById(user?.id);
